@@ -1,6 +1,5 @@
-import { createRemoteFileNode } from "gatsby-source-filesystem";
+// import { createRemoteFileNode } from 'gatsby-source-filesystem';
 import { getAllItems } from "./fetcher";
-import { ItemNode } from "./nodes";
 
 // const downloadMediaFiles = async ({ items, store, cache, createNode }) =>
 //   Promise.all(
@@ -28,18 +27,34 @@ import { ItemNode } from "./nodes";
 //     })
 //   );
 
-exports.sourceNodes = async (
-  { boundActionCreators: { createNode }, getNode, store, cache, createNodeId },
-  { wishlistUrl, fetchImages = false, language = "en-US", limit = false }
+export const sourceNodes = async (
+  { actions: { createNode }, createNodeId, createContentDigest },
+  { wishlistUrl, language, limit }
 ) => {
-  let items = await getAllItems(wishlistUrl, language, limit);
+  const items = await getAllItems(wishlistUrl, language, limit);
 
   // if (fetchImages) {
   //   items = downloadMediaFiles({ items, store, cache, createNode });
   // }
 
+  const processItem = item => {
+    const nodeId = createNodeId(item.id);
+    const nodeContent = JSON.stringify(item);
+
+    return Object.assign({}, item, {
+      id: nodeId,
+      parent: null,
+      children: [],
+      internal: {
+        type: "AmazonWishlistItem",
+        content: nodeContent,
+        contentDigest: createContentDigest(item)
+      }
+    });
+  };
+
   items.forEach(item => {
-    const itemNode = ItemNode(item);
-    createNode(itemNode);
+    const nodeData = processItem(item);
+    createNode(nodeData);
   });
 };

@@ -1,12 +1,14 @@
 "use strict";
 
-var _gatsbySourceFilesystem = require("gatsby-source-filesystem");
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.sourceNodes = undefined;
 
 var _fetcher = require("./fetcher");
 
-var _nodes = require("./nodes");
+function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; } // import { createRemoteFileNode } from 'gatsby-source-filesystem';
 
-function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
 
 // const downloadMediaFiles = async ({ items, store, cache, createNode }) =>
 //   Promise.all(
@@ -34,21 +36,37 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 //     })
 //   );
 
-exports.sourceNodes = (() => {
-  var _ref = _asyncToGenerator(function* ({ boundActionCreators: { createNode }, getNode, store, cache, createNodeId }, { wishlistUrl, fetchImages = false, language = "en-US", limit = false }) {
-    let items = yield (0, _fetcher.getAllItems)(wishlistUrl, language, limit);
+const sourceNodes = exports.sourceNodes = (() => {
+  var _ref = _asyncToGenerator(function* ({ actions: { createNode }, createNodeId, createContentDigest }, { wishlistUrl, language, limit }) {
+    const items = yield (0, _fetcher.getAllItems)(wishlistUrl, language, limit);
 
     // if (fetchImages) {
     //   items = downloadMediaFiles({ items, store, cache, createNode });
     // }
 
+    const processItem = function processItem(item) {
+      const nodeId = createNodeId(item.id);
+      const nodeContent = JSON.stringify(item);
+
+      return Object.assign({}, item, {
+        id: nodeId,
+        parent: null,
+        children: [],
+        internal: {
+          type: "AmazonWishlistItem",
+          content: nodeContent,
+          contentDigest: createContentDigest(item)
+        }
+      });
+    };
+
     items.forEach(function (item) {
-      const itemNode = (0, _nodes.ItemNode)(item);
-      createNode(itemNode);
+      const nodeData = processItem(item);
+      createNode(nodeData);
     });
   });
 
-  return function (_x, _x2) {
+  return function sourceNodes(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 })();

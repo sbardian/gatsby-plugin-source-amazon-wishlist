@@ -3,23 +3,34 @@
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.getAllItems = undefined;
+
+var _requestPromise = require("request-promise");
+
+var _requestPromise2 = _interopRequireDefault(_requestPromise);
+
+var _cheerio = require("cheerio");
+
+var _cheerio2 = _interopRequireDefault(_cheerio);
+
+var _url = require("url");
+
+var _url2 = _interopRequireDefault(_url);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, arguments); return new Promise(function (resolve, reject) { function step(key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { return Promise.resolve(value).then(function (value) { step("next", value); }, function (err) { step("throw", err); }); } } return step("next"); }); }; }
-
-const rp = require("request-promise");
-const cheerio = require("cheerio");
-const URL = require("url");
 
 const selectors = {
   title: "#wl-list-info .profile-list-name",
   nextPage: "a.wl-see-more",
-  items: "#g-items div[data-id]",
-  itemTitle: "h5",
-  itemId: "h5 a",
+  items: "#g-items li",
+  itemTitle: "h3 a",
+  itemId: "h3 a",
   itemPriority: ".g-item-comment-row span[id^='itemPriorityLabel']",
   itemRequestedCount: ".g-item-comment-row span[id^='itemRequested_']",
   itemPurchasedCount: ".g-item-comment-row span[id^='itemPurchased_']",
-  itemComment: ".g-item-comment-row div[id^='itemCommentRow'] .g-comment-quote",
+  itemComment: "div.g-item-comment-row span[id^='itemComment']",
   itemNewAndUsed: ".a-row.itemUsedAndNew",
   itemPrice: ".a-price",
   itemPriceCurrency: ".a-price-symbol",
@@ -36,14 +47,14 @@ const getPage = (() => {
         "accept-language": language
       },
       transform: function transform(body) {
-        return cheerio.load(body);
+        return _cheerio2.default.load(body);
       }
     };
 
-    const $ = yield rp(options);
+    const $ = yield (0, _requestPromise2.default)(options);
 
     const nextPageHref = $(selectors.nextPage).attr("href");
-    const nextPageUrl = nextPageHref && URL.resolve(baseUrl, nextPageHref);
+    const nextPageUrl = nextPageHref && _url2.default.resolve(baseUrl, nextPageHref);
 
     return {
       items: getItems($, baseUrl),
@@ -56,18 +67,17 @@ const getPage = (() => {
   };
 })();
 
-function getItems($, baseUrl) {
+const getItems = ($, baseUrl) => {
   return $(selectors.items).map((index, element) => {
     // Some items may be unavailable, so we exclude those:
     if ($(element).attr("data-price") == "-Infinity") {
       return;
     }
-
     const title = $(selectors.itemTitle, element).text().trim();
 
     const link = $(selectors.itemId, element).attr("href");
     const id = link.split("/")[2];
-    const url = URL.resolve(baseUrl, link);
+    const url = _url2.default.resolve(baseUrl, link);
 
     const $itemPrice = $(selectors.itemPrice, element);
     const $itemNewAndUsed = $(selectors.itemNewAndUsed, element);
@@ -110,11 +120,11 @@ function getItems($, baseUrl) {
       purchased
     };
   }).get();
-}
+};
 
 const getAllItems = exports.getAllItems = (() => {
   var _ref2 = _asyncToGenerator(function* (url, language = "en-US", limit = false) {
-    const baseUrl = URL.resolve(url, "/");
+    const baseUrl = _url2.default.resolve(url, "/");
 
     let items = [];
     let pageUrl = url;
@@ -134,7 +144,6 @@ const getAllItems = exports.getAllItems = (() => {
         break;
       }
     }
-
     return items;
   });
 

@@ -1,17 +1,17 @@
-const rp = require("request-promise");
-const cheerio = require("cheerio");
-const URL = require("url");
+import rp from "request-promise";
+import cheerio from "cheerio";
+import URL from "url";
 
 const selectors = {
   title: "#wl-list-info .profile-list-name",
   nextPage: "a.wl-see-more",
-  items: "#g-items div[data-id]",
-  itemTitle: "h5",
-  itemId: "h5 a",
+  items: "#g-items li",
+  itemTitle: "h3 a",
+  itemId: "h3 a",
   itemPriority: ".g-item-comment-row span[id^='itemPriorityLabel']",
   itemRequestedCount: ".g-item-comment-row span[id^='itemRequested_']",
   itemPurchasedCount: ".g-item-comment-row span[id^='itemPurchased_']",
-  itemComment: ".g-item-comment-row div[id^='itemCommentRow'] .g-comment-quote",
+  itemComment: "div.g-item-comment-row span[id^='itemComment']",
   itemNewAndUsed: ".a-row.itemUsedAndNew",
   itemPrice: ".a-price",
   itemPriceCurrency: ".a-price-symbol",
@@ -40,14 +40,13 @@ const getPage = async (url, baseUrl, language) => {
   };
 };
 
-function getItems($, baseUrl) {
+const getItems = ($, baseUrl) => {
   return $(selectors.items)
     .map((index, element) => {
       // Some items may be unavailable, so we exclude those:
       if ($(element).attr("data-price") == "-Infinity") {
         return;
       }
-
       const title = $(selectors.itemTitle, element)
         .text()
         .trim();
@@ -110,7 +109,7 @@ function getItems($, baseUrl) {
       };
     })
     .get();
-}
+};
 
 export const getAllItems = async (url, language = "en-US", limit = false) => {
   const baseUrl = URL.resolve(url, "/");
@@ -133,6 +132,5 @@ export const getAllItems = async (url, language = "en-US", limit = false) => {
       break;
     }
   }
-
   return items;
 };
