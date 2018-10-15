@@ -1,22 +1,26 @@
-# gatsby-source-amazon-wishlist
+# @sbardian/gatsby-source-amazon-wishlist
+
 > Loads items from an Amazon Wishlist into Gatsby.js
+
+> Fork from [Unobvious-Technology](https://github.com/Unobvious-Technology/gatsby-plugin-source-amazon-wishlist).
 
 ## Installation
 
 ```bash
-npm install gatsby-source-amazon-wishlist
+npm install @sbardian/gatsby-source-amazon-wishlist
 ```
 
 ## Usage
 
 Edit `gatsby-config.js` to use the plugin:
+
 ```javascript
 {
     ...
     plugins: [
     ...
     {
-      resolve: 'gatsby-source-amazon-wishlist',
+      resolve: '@sbardian/gatsby-source-amazon-wishlist',
       options: {
         wishlistUrl: 'https://www.amazon.de/registry/wishlist/2WVYBLDQ5KDSG',
         language: 'en-GB',
@@ -29,9 +33,9 @@ Edit `gatsby-config.js` to use the plugin:
 
 ### Options
 
-* `wishlistUrl`: URL to your amazon wishlist, this must be public or shared.
-* `language`: The language to pass in the `Accept-Language` header, I use `en-GB` because I like the euro sign in front of my prices, defaults to `en-US`.
-* `limit`: Whether to stop fetching at a specific limit, defaults to `false`
+- `wishlistUrl`: URL to your amazon wishlist, this must be `public` or `shared`.
+- `language`: The language to pass in the `Accept-Language` header, defaults to `en-US`.
+- `limit`: Whether to stop fetching at a specific limit, defaults to `false`
 
 ## Querying
 
@@ -59,4 +63,3 @@ You can query the nodes created by the plugin as follows:
   }
 }
 ```
-
