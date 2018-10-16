@@ -40,12 +40,9 @@ const selectors = {
 };
 
 const getPage = (() => {
-  var _ref = _asyncToGenerator(function* (url, baseUrl, language) {
+  var _ref = _asyncToGenerator(function* (url, baseUrl) {
     var options = {
       uri: url,
-      headers: {
-        "accept-language": language
-      },
       transform: function transform(body) {
         return _cheerio2.default.load(body);
       }
@@ -62,7 +59,7 @@ const getPage = (() => {
     };
   });
 
-  return function getPage(_x, _x2, _x3) {
+  return function getPage(_x, _x2) {
     return _ref.apply(this, arguments);
   };
 })();
@@ -109,10 +106,10 @@ const getItems = ($, baseUrl) => {
       id,
       title,
       url,
+      price,
       image: {
         url: imageUrl
       },
-      price,
       features,
       comment,
       priority,
@@ -123,14 +120,14 @@ const getItems = ($, baseUrl) => {
 };
 
 const getAllItems = exports.getAllItems = (() => {
-  var _ref2 = _asyncToGenerator(function* (url, language = "en-US", limit = false) {
+  var _ref2 = _asyncToGenerator(function* (url, limit = false) {
     const baseUrl = _url2.default.resolve(url, "/");
 
     let items = [];
     let pageUrl = url;
 
     while (pageUrl) {
-      var _ref3 = yield getPage(pageUrl, baseUrl, language);
+      var _ref3 = yield getPage(pageUrl, baseUrl);
 
       let newItems = _ref3.items,
           nextPageUrl = _ref3.nextPageUrl;
@@ -147,7 +144,7 @@ const getAllItems = exports.getAllItems = (() => {
     return items;
   });
 
-  return function getAllItems(_x4) {
+  return function getAllItems(_x3) {
     return _ref2.apply(this, arguments);
   };
 })();

@@ -1,6 +1,6 @@
 {
   "name": "@sbardian/gatsby-source-amazon-wishlist",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Gatsby source plugin for loading items from an Amazon Wishlist",
   "main": "gatsby-node.js",
   "scripts": {
