@@ -29,14 +29,8 @@ import { getAllItems } from "./fetcher";
 
 export const sourceNodes = async (
   { actions: { createNode }, createNodeId, createContentDigest },
-  { wishlistUrl, language, limit }
+  { lists }
 ) => {
-  const items = await getAllItems(wishlistUrl, language, limit);
-
-  // if (fetchImages) {
-  //   items = downloadMediaFiles({ items, store, cache, createNode });
-  // }
-
   const processItem = item => {
     const nodeId = createNodeId(item.id);
     const nodeContent = JSON.stringify(item);
@@ -53,8 +47,15 @@ export const sourceNodes = async (
     });
   };
 
-  items.forEach(item => {
-    const nodeData = processItem(item);
-    createNode(nodeData);
-  });
+  for (const list of lists) {
+    const items = await getAllItems(list.wishlistUrl, list.limit);
+    items.forEach(item => {
+      const nodeData = processItem({ owner: list.owner, ...item }, list);
+      createNode(nodeData);
+    });
+  }
+
+  // if (fetchImages) {
+  //   items = downloadMediaFiles({ items, store, cache, createNode });
+  // }
 };

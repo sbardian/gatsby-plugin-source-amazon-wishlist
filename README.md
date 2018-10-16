@@ -22,9 +22,17 @@ Edit `gatsby-config.js` to use the plugin:
     {
       resolve: '@sbardian/gatsby-source-amazon-wishlist',
       options: {
-        wishlistUrl: 'https://www.amazon.de/registry/wishlist/2WVYBLDQ5KDSG',
-        language: 'en-GB',
-        limit: 25,
+        lists: [
+          {
+            owner: 'Brian',
+            wishlistUrl: 'https://www.amazon.com/hz/wishlist/ls/1H5VWB16TALUC',
+            limit: 25,
+          },
+          {
+            owner: 'Bob',
+            wishlistUrl: 'https://www.amazon.com/hz/wishlist/ls/1H5VWB16TALUC',
+          }
+        ]
       },
     },
   ]
@@ -33,20 +41,25 @@ Edit `gatsby-config.js` to use the plugin:
 
 ### Options
 
-- `wishlistUrl`: URL to your amazon wishlist, this must be `public` or `shared`.
-- `language`: The language to pass in the `Accept-Language` header, defaults to `en-US`.
-- `limit`: Whether to stop fetching at a specific limit, defaults to `false`
+- `lists`: Array of wishlist options `<Array>`
+  - `owner`: Owner of wishlist: `<String>`
+  - `wishlistUrl`: URL to your amazon wishlist, must be `public` or `shared`: `<String>`
+  - `limit`: Whether to stop fetching at a specific limit, defaults to `false`: `<Int>`
 
 ## Querying
 
 You can query the nodes created by the plugin as follows:
 
-```graphql
+StaticQuery
+
+```
+graphql`
 {
   allAmazonWishlistItem {
     edges {
       node {
         id
+        owner
         title
         url
         price
@@ -62,4 +75,33 @@ You can query the nodes created by the plugin as follows:
     }
   }
 }
+`
+```
+
+Page query with filters
+
+```
+graphql`
+{
+  allAmazonWishlistItem(filter: { owner: { eq: "brian" } }) {
+    edges {
+      node {
+        id
+        owner
+        title
+        url
+        price
+        features
+        comment
+        priority
+        purchased
+        requested
+        image {
+          url
+        }
+      }
+    }
+  }
+}
+`
 ```

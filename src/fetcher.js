@@ -20,12 +20,9 @@ const selectors = {
   itemImage: ".g-itemImage img"
 };
 
-const getPage = async (url, baseUrl, language) => {
+const getPage = async (url, baseUrl) => {
   var options = {
     uri: url,
-    headers: {
-      "accept-language": language
-    },
     transform: body => cheerio.load(body)
   };
 
@@ -97,10 +94,10 @@ const getItems = ($, baseUrl) => {
         id,
         title,
         url,
+        price,
         image: {
           url: imageUrl
         },
-        price,
         features,
         comment,
         priority,
@@ -111,18 +108,14 @@ const getItems = ($, baseUrl) => {
     .get();
 };
 
-export const getAllItems = async (url, language = "en-US", limit = false) => {
+export const getAllItems = async (url, limit = false) => {
   const baseUrl = URL.resolve(url, "/");
 
   let items = [];
   let pageUrl = url;
 
   while (pageUrl) {
-    let { items: newItems, nextPageUrl } = await getPage(
-      pageUrl,
-      baseUrl,
-      language
-    );
+    let { items: newItems, nextPageUrl } = await getPage(pageUrl, baseUrl);
 
     items = items.concat(newItems);
     pageUrl = nextPageUrl;
