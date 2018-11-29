@@ -41,7 +41,7 @@ const selectors = {
 
 const getPage = (() => {
   var _ref = _asyncToGenerator(function* (url, baseUrl) {
-    const $ = _cheerio2.default.load((yield yield (0, _nodeFetch2.default)(url).text()));
+    const $ = _cheerio2.default.load((yield (yield (0, _nodeFetch2.default)(url)).text()));
 
     const nextPageHref = $(selectors.nextPage).attr("href");
     const nextPageUrl = nextPageHref && _url2.default.resolve(baseUrl, nextPageHref);
