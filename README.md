@@ -25,12 +25,12 @@ Edit `gatsby-config.js` to use the plugin:
         lists: [
           {
             owner: 'Brian',
-            wishlistUrl: 'https://www.amazon.com/hz/wishlist/ls/1H5VWB16TALUC',
+            wishlistUrl: 'https://www.amazon.com/hz/wishlist/ls/<wishlist code>',
             limit: 25,
           },
           {
             owner: 'Bob',
-            wishlistUrl: 'https://www.amazon.com/hz/wishlist/ls/1H5VWB16TALUC',
+            wishlistUrl: 'https://www.amazon.com/hz/wishlist/ls/<wishlist code>',
           }
         ]
       },
