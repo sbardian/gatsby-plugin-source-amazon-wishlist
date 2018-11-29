@@ -1,4 +1,4 @@
-import rp from "request-promise";
+import fetch from "node-fetch";
 import cheerio from "cheerio";
 import URL from "url";
 
@@ -21,12 +21,7 @@ const selectors = {
 };
 
 const getPage = async (url, baseUrl) => {
-  var options = {
-    uri: url,
-    transform: body => cheerio.load(body)
-  };
-
-  const $ = await rp(options);
+  const $ = cheerio.load(await await fetch(url).text());
 
   const nextPageHref = $(selectors.nextPage).attr("href");
   const nextPageUrl = nextPageHref && URL.resolve(baseUrl, nextPageHref);
