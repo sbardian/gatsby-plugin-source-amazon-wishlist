@@ -5,9 +5,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.getAllItems = undefined;
 
-var _requestPromise = require("request-promise");
+var _nodeFetch = require("node-fetch");
 
-var _requestPromise2 = _interopRequireDefault(_requestPromise);
+var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
 
 var _cheerio = require("cheerio");
 
@@ -41,14 +41,7 @@ const selectors = {
 
 const getPage = (() => {
   var _ref = _asyncToGenerator(function* (url, baseUrl) {
-    var options = {
-      uri: url,
-      transform: function transform(body) {
-        return _cheerio2.default.load(body);
-      }
-    };
-
-    const $ = yield (0, _requestPromise2.default)(options);
+    const $ = _cheerio2.default.load((yield yield (0, _nodeFetch2.default)(url).text()));
 
     const nextPageHref = $(selectors.nextPage).attr("href");
     const nextPageUrl = nextPageHref && _url2.default.resolve(baseUrl, nextPageHref);
