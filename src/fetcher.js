@@ -21,7 +21,7 @@ const selectors = {
 };
 
 const getPage = async (url, baseUrl) => {
-  const $ = cheerio.load(await await fetch(url).text());
+  const $ = cheerio.load(await (await fetch(url)).text());
 
   const nextPageHref = $(selectors.nextPage).attr("href");
   const nextPageUrl = nextPageHref && URL.resolve(baseUrl, nextPageHref);
