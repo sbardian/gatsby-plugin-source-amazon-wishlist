@@ -95,7 +95,7 @@ const getItems = ($, baseUrl) => {
         },
         features,
         comment,
-        priority,
+        priority: priority || "medium",
         requested,
         purchased
       };
