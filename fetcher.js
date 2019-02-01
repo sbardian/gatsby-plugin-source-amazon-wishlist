@@ -91,9 +91,9 @@ const getItems = ($, baseUrl) => {
     const features = $(".a-row.a-spacing-small.a-size-small", element).find("span[class='a-size-small']").map((index, element) => $(element).text()).get().join(", ");
 
     const comment = $(selectors.itemComment, element).text();
-    const initalPriority = $(selectors.itemPriority, element).text();
+    const initialPriority = $(selectors.itemPriority, element).text();
     let priority = "";
-    if (!initalPriority || initialPriority === "") {
+    if (!initialPriority || initialPriority === "") {
       priority = "medium";
     } else {
       priority = initialPriority;
