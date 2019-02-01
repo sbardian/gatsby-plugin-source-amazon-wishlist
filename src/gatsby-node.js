@@ -1,31 +1,4 @@
-// import { createRemoteFileNode } from 'gatsby-source-filesystem';
 import { getAllItems } from "./fetcher";
-
-// const downloadMediaFiles = async ({ items, store, cache, createNode }) =>
-//   Promise.all(
-//     items.map(async item => {
-//       let fileNode;
-//       if (item.imageUrl) {
-//         try {
-//           fileNode = await createRemoteFileNode({
-//             url: item.imageUrl,
-//             store,
-//             cache,
-//             createNode
-//           });
-//         } catch (e) {
-//           // Ignore
-//         }
-//       }
-
-//       if (fileNode) {
-//         item.image___NODE = fileNode.id;
-//         delete item.imageUrl;
-//       }
-
-//       return item;
-//     })
-//   );
 
 export const sourceNodes = async (
   { actions: { createNode }, createNodeId, createContentDigest },
@@ -54,8 +27,4 @@ export const sourceNodes = async (
       createNode(nodeData);
     });
   }
-
-  // if (fetchImages) {
-  //   items = downloadMediaFiles({ items, store, cache, createNode });
-  // }
 };
