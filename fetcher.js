@@ -91,7 +91,13 @@ const getItems = ($, baseUrl) => {
     const features = $(".a-row.a-spacing-small.a-size-small", element).find("span[class='a-size-small']").map((index, element) => $(element).text()).get().join(", ");
 
     const comment = $(selectors.itemComment, element).text();
-    const priority = $(selectors.itemPriority, element).text();
+    const initalPriority = $(selectors.itemPriority, element).text();
+    let priority = "";
+    if (!initalPriority || initialPriority === "") {
+      priority = "medium";
+    } else {
+      priority = initialPriority;
+    }
     const requested = parseInt($(selectors.itemRequestedCount, element).text(), 10);
     const purchased = parseInt($(selectors.itemPurchasedCount, element).text(), 10);
 

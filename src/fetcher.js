@@ -75,7 +75,13 @@ const getItems = ($, baseUrl) => {
         .join(", ");
 
       const comment = $(selectors.itemComment, element).text();
-      const priority = $(selectors.itemPriority, element).text();
+      const initialPriority = $(selectors.itemPriority, element).text();
+      let priority = "";
+      if (!initialPriority || initialPriority === "") {
+        priority = "medium";
+      } else {
+        priority = initialPriority;
+      }
       const requested = parseInt(
         $(selectors.itemRequestedCount, element).text(),
         10
